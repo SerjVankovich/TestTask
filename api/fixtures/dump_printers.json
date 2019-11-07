@@ -1,0 +1,33 @@
+[
+  {
+    "model": "api.printer",
+    "pk": 1,
+    "fields": {
+      "name": "second_printer",
+      "api_key": "second_printer",
+      "check_type": "client",
+      "point_id": 2
+    }
+  },
+  {
+    "model": "api.printer",
+    "pk": 2,
+    "fields": {
+      "name": "first_printer",
+      "api_key": "first_printer",
+      "check_type": "kitchen|client",
+      "point_id": 1
+    }
+  },
+
+  {
+    "model": "api.printer",
+    "pk": 3,
+    "fields": {
+      "name": "third_printer",
+      "api_key": "third_printer",
+      "check_type": "kitchen",
+      "point_id": 3
+    }
+  }
+]
