@@ -1,12 +1,16 @@
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 
+
 # Create your models here.
 class Printer(models.Model):
     name = models.CharField(max_length=150)
     api_key = models.CharField(max_length=150, unique=True)
     check_type = models.CharField(max_length=150)
     point_id = models.IntegerField()
+
+    def __str__(self):
+        return self.api_key
 
 
 class Check(models.Model):

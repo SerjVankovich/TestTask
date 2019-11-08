@@ -26,5 +26,4 @@ def make_pdf(content, order_id, type_check):
     checks = Check.objects.filter(order__id=int(order_id))
     for ch in checks:
         ch.status = 'rendered'
-        ch.pdf_file = order_id + '_' + type_check + '.pdf'
         ch.save()

@@ -4,13 +4,15 @@ from django.shortcuts import render, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Printer, Check
-from .responses import ok_response, checks_made, no_printer, authorization_error_response, check_doesnt_exists, check_is_not_rendered
+from .responses import ok_response, checks_made, no_printer, authorization_error_response, check_doesnt_exists, \
+    check_is_not_rendered
 from .jobs import make_pdf
 import json
 import django_rq
 import base64
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 
 # Create your views here.
 @csrf_exempt
@@ -27,11 +29,12 @@ def create_check(request):
         if len(printers) == 0:
             return no_printer
         else:
+            order_id = str(body['id'])
             for printer in printers:
                 check_types = printer.check_type.split('|')
                 for check_type in check_types:
-                    printer.check_set.create(order=body, status="new", type=check_type)
-            order_id = str(body['id'])
+                    printer.check_set.create(order=body, status="new", type=check_type, pdf_file=order_id + '_' +
+                                                                                                 check_type + '.pdf')
             content = base64.b64encode(render(request, 'api/check_template.html', {'body': body}).content).decode(
                 'utf-8')
             content2 = base64.b64encode(render(request, 'api/kitchen_template.html', {'body': body}).content).decode(
