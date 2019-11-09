@@ -30,18 +30,23 @@ def create_check(request):
             return no_printer
         else:
             order_id = str(body['id'])
+            check_ts = []
             for printer in printers:
                 check_types = printer.check_type.split('|')
                 for check_type in check_types:
                     printer.check_set.create(order=body, status="new", type=check_type, pdf_file=order_id + '_' +
                                                                                                  check_type + '.pdf')
+                    if check_type not in check_ts:
+                        check_ts.append(check_type)
             content = base64.b64encode(render(request, 'api/check_template.html', {'body': body}).content).decode(
                 'utf-8')
             content2 = base64.b64encode(render(request, 'api/kitchen_template.html', {'body': body}).content).decode(
                 'utf-8')
-
-            queue.enqueue(make_pdf, content=content, order_id=order_id, type_check='client')
-            queue.enqueue(make_pdf, content=content2, order_id=order_id, type_check='kitchen')
+            for ch_type in check_ts:
+                if ch_type == 'kitchen':
+                    queue.enqueue(make_pdf, content=content2, order_id=order_id, type_check='kitchen')
+                else:
+                    queue.enqueue(make_pdf, content=content, order_id=order_id, type_check='client')
 
     return ok_response
 

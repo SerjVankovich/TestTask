@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = '^!-_9xdevgdj*$o0oo3gb+8fd&by760n!i4x15&km^=i)k2l4-'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -71,33 +69,29 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'test_task.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'mydb',
-        'PASSWORD': '12345',
-        'USER': 'serj',
-        'HOST': 'localhost',
-        'PORT': 5432
+        'NAME': os.environ['DB_NAME'],
+        'PASSWORD': os.environ['DB_PASSWORD'],
+        'USER': os.environ['DB_USER'],
+        'HOST': os.environ['DB_HOST'],
+        'PORT': os.environ['DB_PORT']
     }
 }
 
 RQ_QUEUES = {
-     'default': {
-     'HOST': 'localhost',
-     'PORT': 6379,
-     'DB': 0,
-     },
+    'default': {
+        'HOST': os.environ['REDIS_HOST'],
+        'PORT': os.environ['REDIS_PORT'],
+        'DB': os.environ['REDIS_DB'],
+    },
 }
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/pdf/')
-
-
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -117,7 +111,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
@@ -130,7 +123,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
